@@ -134,6 +134,12 @@ const EditarLancamentoModal = ({ isOpen, onClose, lancamentoSelecionado, onLanca
     onClose();
   };
 
+  const handleCategoriaChange = (e) => {
+    const categoriaSelecionada = categorias.find(cat => cat.description === e.target.value);
+    setCategoria(e.target.value);
+    setTipo(categoriaSelecionada?.type)
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={handleModalClose}>
       <ModalOverlay />
@@ -141,6 +147,25 @@ const EditarLancamentoModal = ({ isOpen, onClose, lancamentoSelecionado, onLanca
         <ModalHeader>Editar Lançamento</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
+          <FormControl mb={4}>
+            <FormLabel>Categoria</FormLabel>
+            <Select value={categoria} onChange={handleCategoriaChange}>
+              <option value="">Selecione uma opção</option>
+              {categorias.map((cat) => (
+                <option key={cat.id} value={cat.description}>
+                  {cat.description}
+                </option>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl mb={4}>
+            <FormLabel>Tipo</FormLabel>
+            <Select value={tipo} disabled>
+              <option value="">Selecione uma opção</option>
+              <option value="Despesa">Despesa</option>
+              <option value="Receita">Receita</option>
+            </Select>
+          </FormControl>
           <FormControl mb={4}>
             <FormLabel>Descrição</FormLabel>
             <Input placeholder="Descrição" value={descricao} onChange={handleDescricaoChange} />

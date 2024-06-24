@@ -17,7 +17,7 @@ import {
 import { api } from '@/conexao/axios';
 
 const CriarLancamentoModal = ({ isOpen, onClose, onLancamentoCriado }) => {
-  const [tipo, setTipo] = useState('Despesa');
+  const [tipo, setTipo] = useState('');
   const [categorias, setCategorias] = useState([]);
   const [categoria, setCategoria] = useState('');
   const [descricao, setDescricao] = useState('');
@@ -73,7 +73,7 @@ const CriarLancamentoModal = ({ isOpen, onClose, onLancamentoCriado }) => {
 
       if (resposta.status === 201) {
         console.log('Lançamento criado com sucesso:', resposta.data);
-        setTipo('Despesa');
+        setTipo('');
         setCategoria('');
         setDescricao('');
         setValor('');
@@ -95,7 +95,7 @@ const CriarLancamentoModal = ({ isOpen, onClose, onLancamentoCriado }) => {
   };
 
   const handleModalClose = () => {
-    setTipo('Despesa');
+    setTipo('');
     setCategoria('');
     setDescricao('');
     setValor('');
@@ -112,7 +112,7 @@ const CriarLancamentoModal = ({ isOpen, onClose, onLancamentoCriado }) => {
   const handleCategoriaChange = (e) => {
     const categoriaSelecionada = categorias.find(cat => cat.description === e.target.value);
     setCategoria(e.target.value);
-    setTipo(categoriaSelecionada?.type || 'Despesa');
+    setTipo(categoriaSelecionada?.type)
   };
 
   return (
@@ -125,6 +125,7 @@ const CriarLancamentoModal = ({ isOpen, onClose, onLancamentoCriado }) => {
           <FormControl mb={4}>
             <FormLabel>Categoria</FormLabel>
             <Select value={categoria} onChange={handleCategoriaChange}>
+              <option value="">Selecione uma opção</option>
               {categorias.map((cat) => (
                 <option key={cat.id} value={cat.description}>
                   {cat.description}
@@ -134,7 +135,8 @@ const CriarLancamentoModal = ({ isOpen, onClose, onLancamentoCriado }) => {
           </FormControl>
           <FormControl mb={4}>
             <FormLabel>Tipo</FormLabel>
-            <Select value={tipo} onChange={(e) => setTipo(e.target.value)} disabled>
+            <Select value={tipo} disabled>
+              <option value="">Selecione uma opção</option>
               <option value="Despesa">Despesa</option>
               <option value="Receita">Receita</option>
             </Select>
