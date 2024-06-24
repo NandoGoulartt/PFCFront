@@ -8,15 +8,18 @@ import {
   Td,
   TableContainer,
   Button,
+  Grid,
 } from '@chakra-ui/react';
 import { useEffect, useState } from "react";
 import { api } from '@/conexao/axios';
+import CriarLancamentoModal from '@/componentes/lancamento/CriarLancamentoModal.js';
 import EditarLancamentoModal from "@/componentes/lancamento/EditarLancamentoModal.js";
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
-export default function Home() {
+export default function Page() {
   const [lancamentos, setLancamentos] = useState([]);
+  const [modalAberto, setModalAberto] = useState(false);
   const [modalEditAberto, setModalEditAberto] = useState(false);
   const [lancamentoSelecionada, setLancamentoSelecionada] = useState(null);
 
@@ -26,7 +29,7 @@ export default function Home() {
 
   const handleLancamentoGet = async () => {
     try {
-      const resposta = await api.get('lancamentosvencidos');
+      const resposta = await api.get('lancamentos');
 
       if (resposta.status === 200) {
         setLancamentos(resposta.data);
@@ -36,6 +39,10 @@ export default function Home() {
     } catch (error) {
       console.error('Erro ao fazer a requisição:', error);
     }
+  };
+
+  const handleAdicionarLancamento = () => {
+    setModalAberto(true);
   };
 
   const handleEditarLancamento = (lancamento) => {
@@ -115,6 +122,16 @@ export default function Home() {
           </Tbody>
         </Table>
       </TableContainer>
+      <Grid templateColumns="1fr auto" gap={4} alignItems="end" my={4} mx={4}>
+        <Button colorScheme="blue" onClick={handleAdicionarLancamento}>
+          Adicionar
+        </Button>
+      </Grid>
+      <CriarLancamentoModal
+        isOpen={modalAberto}
+        onClose={() => setModalAberto(false)}
+        onLancamentoCriado={handleLancamentoGet}
+      />
       <EditarLancamentoModal
         isOpen={modalEditAberto}
         onClose={() => setModalEditAberto(false)}
